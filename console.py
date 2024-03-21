@@ -113,42 +113,38 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-def do_create(self, args):
-    """Creates an object of any class with given parameters"""
-    class_name, *params = args.split(" ")
-    if not class_name:
-        print("** class name missing **")
-        return
-    elif class_name not in self.classes:
-        print("** class doesn't exist **")
-        return
-
-    obj_params = {}
-
-    for param in params:
-        if "=" not in param:
-            print(f"Invalid parameter format: {param}. Skipping...")
-            continue
-
-        key, value = param.split("=")
-        value = value.strip("\"")
-
-        if '_' in value:
-            value = value.replace('_', ' ')
-
+    def do_create(self, args):
+        """(updated) Create an object of any class"""
         try:
-            if '.' in value:
-                value = float(value)
-            else:
-                value = int(value)
-        except ValueError:
+            class_names = args.split(" ")[0]
+        except IndexError:
             pass
+        if not class_names:
+            print("** class name missing **")
+            return
+        elif class_names not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        class_list= args.split(" ")
 
-        obj_params[key] = value
+        new_instance = eval(class_names)()
+        for i in range(1,len(class_list)):
+            keys, values = tuple(class_list[i].split("="))
+            if values.startswith('"'):
+                values = values.strip('"')
+                values = values.replace("_", " ")
+            else:
+                try:
+                    values = eval(values)
+                except Exception:
+                    print(f"** couldn't evaluate {values}")
+                    pass
+            if hasattr(new_instance, keys):
+                setattr(new_instance, keys, values)
 
-    new_instance = self.classes[class_name](**obj_params)
-    new_instance.save()
-    print(new_instance.id)
+        new_instance.save()
+        print(new_instance.id)
+
 
     def help_create(self):
         """ Help information for the create method """
