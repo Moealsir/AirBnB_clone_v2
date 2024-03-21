@@ -80,6 +80,11 @@ Usage: create <class_name>
 3aa5babc-efb6-4041-bfe9-3cc9727588f8
 (hbnb)                   
 ```
+```
+(hbnb) create State name="California"
+(hbnb) d80e0344-63eb-434a-b1e0-07783522124e
+(hbnb)                   
+```
 ###### Example 1: Show an object
 Usage: show <class_name> <_id>
 
