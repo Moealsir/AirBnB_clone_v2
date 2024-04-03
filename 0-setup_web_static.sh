@@ -26,7 +26,7 @@ printf %s "server {
     }
 
     location /redirect_me {
-        return 301 http://cuberule.com/;
+        return 301 http://kirito99x.tech;
     }
 
     error_page 404 /404.html;
