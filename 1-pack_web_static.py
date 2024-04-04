@@ -9,9 +9,10 @@ def do_pack():
     """create a .tgs archive from the contents of the web_static folder"""
     date = datetime.now().strftime("%Y%m%d%H%M%S")
     archive_file = "versions/web_static_{}.tgz".format(date)
-    if os.path.isdir("versions") is False:
-        if local("mkdir -p versions").failed is True:
-            return None
-    if local("tarr -cvzf {} web_statics".format(archive_file)).failed is True:
+    try:
+        if os.path.isdir("versions") is False:
+            local("mkdir -p versions")
+            local("tar -cvzf {} web_static".format(archive_file))
+            return archive_file
+    except Exception as e:
         return None
-    return archive_file
