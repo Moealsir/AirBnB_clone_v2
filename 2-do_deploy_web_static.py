@@ -2,10 +2,24 @@
 """a module that istributes an archive to your web servers,
 using the function do_deploy
 """
-from os.path import exists
-from fabric.api import env, put, run
+from os.path import exists ,isdir
+from fabric.api import local, env, put, run
+from datetime import datetime
 env.hosts = ['18.235.255.77', '54.160.73.198']
 
+
+def do_pack():
+    """create a .tgs archive from the contents of the web_static folder"""
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_file = "versions/web_static_{}.tgz".format(date)
+    try:
+        if isdir("versions") is False:
+            local("mkdir versions")
+        local("tar -cvzf {} web_static".format(archive_file))
+        return archive_file
+    except Exception as e:
+        return None
+    
 
 def do_deploy(archive_path):
     """distributes an archive to the web servers"""
