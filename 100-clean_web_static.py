@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """a module that istributes an archive to your web servers,
 using the function do_deploy
