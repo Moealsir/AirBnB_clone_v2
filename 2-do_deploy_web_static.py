@@ -7,17 +7,17 @@ from datetime import datetime
 env.hosts = ["18.235.255.77", "54.160.73.198"]
 
 
-def do_pack():
-    """create a .tgs archive from the contents of the web_static folder"""
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_file = "versions/web_static_{}.tgz".format(date)
-    try:
-        if os.path.isdir("versions") is False:
-            local("mkdir versions")
-        local("tar -cvzf {} web_static".format(archive_file))
-        return archive_file
-    except Exception as e:
-        return None
+### def do_pack():
+###    """create a .tgs archive from the contents of the web_static folder"""
+###    date = datetime.now().strftime("%Y%m%d%H%M%S")
+###    archive_file = "versions/web_static_{}.tgz".format(date)
+###    try:
+###       if os.path.isdir("versions") is False:
+###           local("mkdir versions")
+###        local("tar -cvzf {} web_static".format(archive_file))
+###        return archive_file
+###    except Exception as e:
+###        return None
 
 
 def deploy(archive_path):
