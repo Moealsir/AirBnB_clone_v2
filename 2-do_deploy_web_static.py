@@ -2,24 +2,10 @@
 """a module that istributes an archive to your web servers,
 using the function do_deploy
 """
-from os.path import exists ,isdir
-from fabric.api import local, env, put, run
-from datetime import datetime
+from fabric.api import put, run, env
+from os.path import exists
 env.hosts = ['18.235.255.77', '54.160.73.198']
 
-
-def do_pack():
-    """create a .tgs archive from the contents of the web_static folder"""
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_file = "versions/web_static_{}.tgz".format(date)
-    try:
-        if isdir("versions") is False:
-            local("mkdir versions")
-        local("tar -cvzf {} web_static".format(archive_file))
-        return archive_file
-    except Exception as e:
-        return None
-    
 
 def do_deploy(archive_path):
     """distributes an archive to the web servers"""
@@ -31,8 +17,8 @@ def do_deploy(archive_path):
         path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
         run('mkdir -p {}{}/'.format(path, no_ext))
-        run('tar -xzf /tmp/{}.tgz -C {}{}/'.format(file_n, path, no_ext))
-        run('rm /tmp/{}.tgz'.format(file_n))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+        run('rm /tmp/{}'.format(file_n))
         run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
         run('rm -rf {}{}/web_static'.format(path, no_ext))
         run('rm -rf /data/web_static/current')
