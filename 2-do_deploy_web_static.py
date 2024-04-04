@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-"""a module that generates a .tgz archives from the web_statics folder"""
+"""a module that istributes an archive to your web servers, using the function do_deploy"""
 import os.path
 from fabric.api import env, put, run
 env.hosts = ["18.235.255.77", "54.160.73.198"]
 
 
-def deploy(archive_path):
+def do_deploy(archive_path):
     """distributes an archive to your web servers using function deploy"""
     if os.path.exists(archive_path) is False:
         return False
