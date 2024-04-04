@@ -22,7 +22,7 @@ def do_pack():
 
 def deploy(archive_path):
     """distributes an archive to your web servers using function deploy"""
-    if os.oath.isdir(archive_path) is False:
+    if os.path.exists(archive_path) is False:
         return False
     folder = archive_path.spilt("/")[-1]
     file_name = folder.spilt(".")[0]

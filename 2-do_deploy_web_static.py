@@ -2,7 +2,6 @@
 """a module that generates a .tgz archives from the web_statics folder"""
 import os.path
 from fabric.api import env, put, run
-
 env.hosts = ["18.235.255.77", "54.160.73.198"]
 
 
@@ -10,9 +9,9 @@ def deploy(archive_path):
     """distributes an archive to your web servers using function deploy"""
     if os.path.exists(archive_path) is False:
         return False
-    folder = archive_path.spilt("/")[-1]
-    file_name = folder.spilt(".")[0]
     try:
+        folder = archive_path.spilt("/")[-1]
+        file_name = folder.spilt(".")[0]
         path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
         run('mkdir -p {}{}/'.format(path, file_name))
