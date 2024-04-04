@@ -16,7 +16,7 @@ sudo chgrp -R ubuntu /data/
 printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    add_header X-Served-By http://kirito99x.tech;
+    add_header X-Served-By kirito99x;
     root   /var/www/html;
     index  index.html index.htm;
 
