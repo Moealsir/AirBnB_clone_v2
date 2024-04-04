@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""a module that istributes an archive to your web servers, using the function do_deploy"""
+"""a module that istributes an archive to your web servers, 
+using the function do_deploy
+"""
 import os.path
 from fabric.api import env, put, run
 env.hosts = ["18.235.255.77", "54.160.73.198"]
@@ -22,5 +24,5 @@ def do_deploy(archive_path):
         run('rm -rf /data/web_static/current')
         run('ln -s {}{}/ /data/web_static/current'.format(path, file_name))
         return True
-    except Exception as e:
+    except:
         return False
