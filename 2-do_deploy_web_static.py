@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""a module that istributes an archive to your web servers, 
+"""a module that istributes an archive to your web servers,
 using the function do_deploy
 """
 import os.path
