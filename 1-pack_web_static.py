@@ -14,5 +14,4 @@ def do_pack():
             return None
     if local("tarr -cvzf {} web_statics".format(archive_file)).failed is True:
         return None
-    else: 
-        return archive_file
+    return archive_file
