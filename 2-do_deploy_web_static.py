@@ -1,42 +1,58 @@
-#!/usr/bin/python3
-"""a module that istributes an archive to your web servers,
-using the function do_deploy
+
+"""pack and deploy content to server
 """
-from fabric.api import local, put, run, env
+from fabric.api import local, env, run, put
 from datetime import datetime
-from os.path import exists, isdir
-env.hosts = ['18.235.255.77', '54.160.73.198']
+import os
+env.hosts = ['35.231.156.161', '34.73.64.44']
+env.user = 'ubuntu'
 
 
 def do_pack():
-    """create a .tgs archive from the contents of the web_static folder"""
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_file = "versions/web_static_{}.tgz".format(date)
-    try:
-        if isdir("versions") is False:
-            local("mkdir versions")
-        local("tar -cvzf {} web_static".format(archive_file))
-        return archive_file
-    except Exception as e:
-        return None
+    """pack all content within web_static
+    into a .tgz archive
+    The archive will be put in versions/
+    """
+    if not os.path.exists("versions"):
+        local("mkdir versions")
+    now = datetime.now()
+    name = "versions/web_static_{}.tgz".format(
+        now.strftime("%Y%m%d%H%M%S")
+    )
+    cmd = "tar -cvzf {} {}".format(name, "web_static")
+    result = local(cmd)
+    if not result.failed:
+        return name
 
 
 def do_deploy(archive_path):
-    """distributes an archive to the web servers"""
-    if exists(archive_path) is False:
+    """deploy package to remote server
+    Arguments:
+        archive_path: path to archive to deploy
+    """
+    if not archive_path or not os.path.exists(archive_path):
         return False
+    put(archive_path, '/tmp')
+    ar_name = archive_path[archive_path.find("/") + 1: -4]
     try:
-        folder = archive_path.split("/")[-1]
-        file_name = folder.split(".")[0]
-        path = "/data/web_static/releases/"
-        put(archive_path, '/tmp/')
-        run('mkdir -p {}{}/'.format(path, file_name))
-        run('tar -xzf /tmp/{} -C {}{}/'.format(folder, path, file_name))
-        run('rm /tmp/{}'.format(folder))
-        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, file_name))
-        run('rm -rf {}{}/web_static'.format(path, file_name))
+        run('mkdir -p /data/web_static/releases/{}/'.format(ar_name))
+        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/'.format(
+                ar_name, ar_name
+        ))
+        run('rm /tmp/{}.tgz'.format(ar_name))
+        run('mv /data/web_static/releases/{}/web_static/* \
+            /data/web_static/releases/{}/'.format(
+                ar_name, ar_name
+        ))
+        run('rm -rf /data/web_static/releases/{}/web_static'.format(
+            ar_name
+        ))
         run('rm -rf /data/web_static/current')
-        run('ln -s {}{}/ /data/web_static/current'.format(path, file_name))
+        run('ln -s /data/web_static/releases/{}/ \
+            /data/web_static/current'.format(
+            ar_name
+        ))
+        print("New version deployed!")
         return True
     except:
         return False
