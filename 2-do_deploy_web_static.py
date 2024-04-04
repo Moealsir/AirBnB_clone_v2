@@ -2,7 +2,7 @@
 """a module that istributes an archive to your web servers,
 using the function do_deploy
 """
-from  os.path import exists
+from os.path import exists
 from fabric.api import env, put, run
 env.hosts = ['18.235.255.77', '54.160.73.198']
 
