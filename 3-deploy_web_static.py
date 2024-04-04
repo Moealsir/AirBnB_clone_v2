@@ -40,7 +40,7 @@ def do_deploy(archive_path):
         return True
     except:
         return False
-    
+
 
 def deploy():
     """creates & distributes an archive to servers"""
